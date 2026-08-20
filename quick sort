@@ -1,0 +1,55 @@
+#include <iostream>
+#include <vector>
+#include <utility> // For std::swap
+
+// Partition function using the Lomuto scheme (chooses last element as pivot)
+int partition(std::vector<int>& arr, int low, int high) {
+    int pivot = arr[high]; // Pivot element
+    int i = (low - 1);    // Index of the smaller element
+
+    for (int j = low; j <= high - 1; ++j) {
+        // If current element is smaller than or equal to pivot
+        if (arr[j] <= pivot) {
+            i++; // Increment index of smaller element
+            std::swap(arr[i], arr[j]);
+        }
+    }
+    // Swap the pivot element with the element at i + 1
+    std::swap(arr[i + 1], arr[high]);
+    return (i + 1); // Return the partitioning index
+}
+
+// Main function that implements Quick Sort
+void quickSort(std::vector<int>& arr, int low, int high) {
+    if (low < high) {
+        // pi is partitioning index, arr[pi] is now at the right place
+        int pi = partition(arr, low, high);
+
+        // Separately sort elements before partition and after partition
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+// Function to print the array
+void printArray(const std::vector<int>& arr) {
+    for (int num : arr) {
+        std::cout << num << " ";
+    }
+    std::cout << std::endl;
+}
+
+int main() {
+    std::vector<int> data = {64, 34, 25, 12, 22, 11, 90};
+    
+    std::cout << "Original array: ";
+    printArray(data);
+    
+    // Call quickSort passing 0 as the starting index and size-1 as the ending index
+    quickSort(data, 0, data.size() - 1);
+    
+    std::cout << "Sorted array:   ";
+    printArray(data);
+    
+    return 0;
+}
